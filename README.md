@@ -8,9 +8,9 @@ This script plots a circular phylogenetic tree with heatmap annotation.
 ```sh
 Rscript treeHM.R -t data/test/test_tree.nwk -d data/test/test_heatmap_values.tsv -o data/test/test_output.pdf
 ```
-- `tree.nwk`: Newick tree file
-- `data.tsv`: TSV file, first column = leaves (matching tree tip labels), next columns = heatmap values
-- `output.pdf`: Output PDF file (default: `treeHM.pdf`)
+- `-t`: Newick tree file
+- `-d`: TSV file, first column = leaves (matching tree tip labels), next columns = heatmap values
+- `-o`: Output PDF file (default: `treeHM.pdf`)
 
 **As a function in R:**
 ```r
