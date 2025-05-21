@@ -24,7 +24,7 @@ dev.off()
 
 ## Example Output
 
-![Example Output](data/example1.png)
+![Example Output](data/images/example1.png)
 
 ## Requirements
 
