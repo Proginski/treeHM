@@ -6,11 +6,11 @@ This script plots a circular phylogenetic tree with heatmap annotation.
 
 **Command line:**
 ```sh
-Rscript treeHM.R -t data/test/test_tree.nwk -d data/test/test_heatmap_values.tsv -o data/test/test_output.pdf
+Rscript treeHM.R --tree data/test/test_tree.nwk --data data/test/test_heatmap_values.tsv --output data/test/test_output.pdf
 ```
-- `-t`: Newick tree file
-- `-d`: TSV file, first column = leaves (matching tree tip labels), next columns = heatmap values
-- `-o`: Output PDF file (default: `treeHM.pdf`)
+- `"-t", "--tree"`: Newick tree file
+- `"-d", "--data"`: TSV file, first column = leaves (matching tree tip labels), next columns = heatmap values
+- `"-o", "--output"`: Output PDF file (default: `treeHM.pdf`)
 
 **As a function in R:**
 ```r

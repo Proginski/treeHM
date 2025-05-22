@@ -70,39 +70,47 @@ create_hm_tree <- function(tree, hm_data, width_per_col=0.04) {
     # Build heatmap layers (one per column)
     layers <- lapply(seq_len(ncol(hm_data)), function(i) hm_data[, i, drop=FALSE])
 
+    # Adapt the base offset for the size of the tree (to be perfected)
+    n_tips <- length(tree$tip.label)
+    base_offset <- width_per_col * (1 + log2(n_tips)) + width_per_col * (n_tips ^ 0.5)
+    # print(paste("********************base_offset", base_offset))
+
     # Plot
     nb_layers <- length(layers)
     palette_continous <- c("Purples", "Greens", "Oranges", "BuPu", "GnBu")
     nb_discrete = 0
     nb_continuous = 0
-    circ_with_heatmap <- circ
+    circ_with_heatmap <- circ # Simple circular tree
     for (i in 1:nb_layers) {
-        if (i > 1) circ_with_heatmap <- circ_with_heatmap + new_scale_fill()
-        if (is.numeric(hm_data[[i]])) {
+        if (i > 1) circ_with_heatmap <- circ_with_heatmap + new_scale_fill() # Add new scale for each layer
+    
+        # Add the i-th heatmap column to the tree plot, with appropriate width and offset
+        circ_with_heatmap <- gheatmap(
+            circ_with_heatmap, layers[[i]], colnames=FALSE, color=NA,
+            width=width_per_col,
+            offset=ifelse(i == 1, 0, base_offset * sum(sapply(layers[1:(i-1)], ncol)))
+        )
+
+        if (is.numeric(hm_data[[i]])) { # Use a continuous color palette for numeric columns
             nb_continuous = nb_continuous + 1
-            circ_with_heatmap <- gheatmap(
-                circ_with_heatmap, layers[[i]], colnames=FALSE, color=NA,
-                width=width_per_col * ncol(layers[[i]]),
-                offset = ifelse(i == 1, 0, width_per_col * sum(sapply(layers[1:(i-1)], ncol)) * 2)
-            ) +
-            scale_fill_distiller(palette = palette_continous[nb_continuous], direction=1) +
-            labs(fill = colnames(layers[[i]])[1])
-        } else {
+            circ_with_heatmap <- circ_with_heatmap +
+                scale_fill_distiller(palette = palette_continous[nb_continuous], direction=1) 
+        } else {                        # Use a discrete color palette for factor/character columns
             nb_discrete = nb_discrete + 1
-            circ_with_heatmap <- gheatmap(
-                circ_with_heatmap, layers[[i]], colnames=FALSE, color=NA,
-                width=width_per_col * ncol(layers[[i]]),
-                offset = ifelse(i == 1, 0, width_per_col * sum(sapply(layers[1:(i-1)], ncol)) * 2)
-            ) +
-            scale_fill_manual(values = palette_discrete[[i]]) +
-            labs(fill = colnames(layers[[i]])[1])
+            circ_with_heatmap <- circ_with_heatmap +
+                scale_fill_manual(values = palette_discrete[[i]])
         }
+
+        # Set the legend title for this heatmap column
+        circ_with_heatmap <- circ_with_heatmap +
+            labs(fill = colnames(layers[[i]])[1])
+    
     }
     circ_with_heatmap + theme(
         plot.margin = unit(c(0, 0, 0, 0), "cm"),
         legend.text = element_text(size = 12),
         legend.title = element_text(size = 20),
-        legend.position = "bottom",
+        legend.position = "right",
         legend.key.height = unit(0.8, "cm")
     )
 }
