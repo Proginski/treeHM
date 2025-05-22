@@ -108,10 +108,10 @@ create_hm_tree <- function(tree, hm_data, width_per_col=0.04) {
     }
     circ_with_heatmap + theme(
         plot.margin = unit(c(0, 0, 0, 0), "cm"),
-        legend.text = element_text(size = 12),
-        legend.title = element_text(size = 20),
+        legend.text = element_text(size = 8),
+        legend.title = element_text(size = 10),
         legend.position = "right",
-        legend.key.height = unit(0.8, "cm")
+        legend.key.height = unit(0.4, "cm")
     )
 }
 
